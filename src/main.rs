@@ -37,12 +37,12 @@ fn hack(n: usize, e: usize) -> usize { // NationalEncyclopedin
 	let (p, q) = factorise(n);
 	let phi = (p - 1) * (q - 1);
 	
-	let mut d = 2;
-	while d * e % phi != 1 {
-		d += 1;
+	let mut mul_phi = phi;
+	while (mul_phi / e + 1) * e % mul_phi != 1 {
+		mul_phi += phi;
 	}
 	
-	d
+	mul_phi / e + 1
 }
 
 fn gen(p: usize, q: usize) -> (usize, usize, usize) { // pq-formeln
@@ -52,12 +52,14 @@ fn gen(p: usize, q: usize) -> (usize, usize, usize) { // pq-formeln
 	let coprime = Integer::lcm(&(p - 1), &(q - 1));
 	let e = primal::Primes::all().find(|p| Integer::gcd(p, &coprime) == 1).unwrap();
 	
-	let mut d = 2;
-	while d * e % phi != 1 {
-		d += 1;
+	let mut mul_phi = phi;
+	while (mul_phi / e + 1) * e % mul_phi != 1 {
+		mul_phi += phi;
 	}
 	
-	(n, e, d)
+	let d = mul_phi / e + 1;
+	
+	(n, e, d) // Ned
 }
 
 fn encrypt(m: usize, n: usize, e: usize) -> usize {
