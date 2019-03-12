@@ -35,14 +35,12 @@ fn factorise(n: usize) -> (usize, usize) {
 
 fn hack(n: usize, e: usize) -> usize { // NationalEncyclopedin
 	let (p, q) = factorise(n);
+	let phi = (p - 1) * (q - 1);
 	
-	let org_phi = (p - 1) * (q - 1);
-    let mut phi = org_phi;
-    while (phi + 1) % e != 1 {
-        phi += org_phi; // 123*d mod org_phi = 1
+	let mut d = 2;
+	while d * e % phi != 1 {
+		d += 1;
 	}
-    
-    let d = (phi + 1) / e;
 	
 	d
 }
