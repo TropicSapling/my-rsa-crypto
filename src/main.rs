@@ -1,4 +1,7 @@
+extern crate num;
+
 use std::io::{stdin, stdout, Write};
+use num::Integer;
 
 fn get(s: &str) -> Result<String, std::io::Error> {
 	print!("{}: ", s);
@@ -37,11 +40,17 @@ fn hack(e: usize, n: usize) -> usize {
 
 fn gen(p: usize, q: usize) -> (usize, usize, usize) {
 	let n = p * q;
+	let phi = (p - 1) * (q - 1);
 	
-	// WIP
+	let coprime = Integer::lcm(&(p - 1), &(q - 1));
+	let e = primal::Primes::all().find(|p| Integer::gcd(p, &coprime) == 1).unwrap();
 	
-//	(n, e, d)
-	(1, 2, 3)
+	let mut d = 2;
+	while d * e % phi != 1 {
+		d += 1;
+	}
+	
+	(n, e, d)
 }
 
 fn encrypt(m: usize, n: usize, e: usize) -> usize {
