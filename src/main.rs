@@ -3,6 +3,20 @@ extern crate num;
 use std::io::{stdin, stdout, Write};
 use num::Integer;
 
+fn powmod(mut base: usize, mut exp: usize, modulus: usize) -> usize {
+	let mut res = 1;
+	while exp > 0 {
+		if exp % 2 == 1 {
+			res = res * base % modulus;
+		}
+		
+		base = base * base % modulus;
+		exp /= 2;
+	}
+	
+	res
+}
+
 fn get(s: &str) -> Result<String, std::io::Error> {
 	print!("{}: ", s);
 	
@@ -19,26 +33,21 @@ fn factorise(n: usize) -> (usize, usize) {
 	(p, n / p)
 }
 
-fn hack(e: usize, n: usize) -> usize {
+fn hack(n: usize, e: usize) -> usize { // NationalEncyclopedin
 	let (p, q) = factorise(n);
 	
 	let org_phi = (p - 1) * (q - 1);
     let mut phi = org_phi;
-/*    while (phi + 1) % e != 1 {
+    while (phi + 1) % e != 1 {
         phi += org_phi; // 123*d mod org_phi = 1
 	}
     
-    let d = (phi + 1) / e; */
-	
-	let mut d = 1;
-	while e * d % phi != 1 {
-		d += 1;
-	}
+    let d = (phi + 1) / e;
 	
 	d
 }
 
-fn gen(p: usize, q: usize) -> (usize, usize, usize) {
+fn gen(p: usize, q: usize) -> (usize, usize, usize) { // pq-formeln
 	let n = p * q;
 	let phi = (p - 1) * (q - 1);
 	
@@ -54,11 +63,11 @@ fn gen(p: usize, q: usize) -> (usize, usize, usize) {
 }
 
 fn encrypt(m: usize, n: usize, e: usize) -> usize {
-	m.pow(e as u32) % n
+	powmod(m, e, n) // jo, men ...
 }
 
 fn decrypt(c: usize, n: usize, d: usize) -> usize {
-	c.pow(d as u32) % n
+	powmod(c, d, n) // Content Delivery Network
 }
 
 fn main() -> Result<(), std::io::Error> {
@@ -72,7 +81,7 @@ fn main() -> Result<(), std::io::Error> {
 			},
 			
 			"HACK" => {
-				println!("PRIVATE KEY: {}\n", hack(get("e")?.parse().unwrap(), get("n")?.parse().unwrap()));
+				println!("PRIVATE KEY: {}\n", hack(get("n")?.parse().unwrap(), get("e")?.parse().unwrap()));
 			},
 			
 			"ENCRYPT" => {
