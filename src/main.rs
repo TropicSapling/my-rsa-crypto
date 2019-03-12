@@ -59,19 +59,19 @@ fn main() -> Result<(), std::io::Error> {
 			"GEN" => {
 				let (n, e, d) = gen(get("p")?.parse().unwrap(), get("q")?.parse().unwrap());
 				
-				println!("KEYS: n = {}, e = {}, d (private) = {}", n, e, d);
+				println!("KEYS: n = {}, e = {}, d (private) = {}\n", n, e, d);
 			},
 			
 			"HACK" => {
-				println!("PRIVATE KEY: {}", hack(get("e")?.parse().unwrap(), get("n")?.parse().unwrap()));
+				println!("PRIVATE KEY: {}\n", hack(get("e")?.parse().unwrap(), get("n")?.parse().unwrap()));
 			},
 			
 			"ENCRYPT" => {
-				println!("ENCRYPTED MSG: {}", encrypt(get("m")?.parse().unwrap(), get("n")?.parse().unwrap(), get("e")?.parse().unwrap()));
+				println!("ENCRYPTED MSG: {}\n", encrypt(get("m")?.parse().unwrap(), get("n")?.parse().unwrap(), get("e")?.parse().unwrap()));
 			},
 			
 			"DECRYPT" => {
-				println!("DECRYPTED MSG: {}", decrypt(get("c")?.parse().unwrap(), get("n")?.parse().unwrap(), get("d")?.parse().unwrap()));
+				println!("DECRYPTED MSG: {}\n", decrypt(get("c")?.parse().unwrap(), get("n")?.parse().unwrap(), get("d")?.parse().unwrap()));
 			},
 			
 			"QUIT" => break,
