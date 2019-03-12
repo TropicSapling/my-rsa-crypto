@@ -3,7 +3,7 @@ extern crate num;
 use std::io::{stdin, stdout, Write};
 use num::Integer;
 
-fn powmod(mut base: usize, mut exp: usize, modulus: usize) -> usize {
+fn powmod(mut base: u128, mut exp: u128, modulus: u128) -> u128 {
 	let mut res = 1;
 	while exp > 0 {
 		if exp % 2 == 1 {
@@ -27,13 +27,13 @@ fn get(s: &str) -> Result<String, std::io::Error> {
     Ok(input.trim().to_string())
 }
 
-fn factorise(n: usize) -> (usize, usize) {
-	let p = primal::Primes::all().find(|p| n % *p == 0).unwrap();
+fn factorise(n: u128) -> (u128, u128) {
+	let p = primal::Primes::all().find(|p| n % *p as u128 == 0).unwrap() as u128;
 	
 	(p, n / p)
 }
 
-fn hack(n: usize, e: usize) -> usize { // NationalEncyclopedin
+fn hack(n: u128, e: u128) -> u128 { // NationalEncyclopedin
 	let (p, q) = factorise(n);
 	let phi = (p - 1) * (q - 1);
 	
@@ -45,12 +45,12 @@ fn hack(n: usize, e: usize) -> usize { // NationalEncyclopedin
 	mul_phi / e + 1
 }
 
-fn gen(p: usize, q: usize) -> (usize, usize, usize) { // pq-formeln
+fn gen(p: u128, q: u128) -> (u128, u128, u128) { // pq-formeln
 	let n = p * q;
 	let phi = (p - 1) * (q - 1);
 	
 	let coprime = Integer::lcm(&(p - 1), &(q - 1));
-	let e = primal::Primes::all().find(|p| Integer::gcd(p, &coprime) == 1).unwrap();
+	let e = primal::Primes::all().find(|p| Integer::gcd(&(*p as u128), &coprime) == 1).unwrap() as u128;
 	
 	let mut mul_phi = phi;
 	while (mul_phi / e + 1) * e % mul_phi != 1 {
@@ -62,11 +62,11 @@ fn gen(p: usize, q: usize) -> (usize, usize, usize) { // pq-formeln
 	(n, e, d) // Ned
 }
 
-fn encrypt(m: usize, n: usize, e: usize) -> usize {
+fn encrypt(m: u128, n: u128, e: u128) -> u128 {
 	powmod(m, e, n) // jo, men ...
 }
 
-fn decrypt(c: usize, n: usize, d: usize) -> usize {
+fn decrypt(c: u128, n: u128, d: u128) -> u128 {
 	powmod(c, d, n) // Content Delivery Network
 }
 
