@@ -2,16 +2,17 @@ extern crate num;
 
 use std::io::{stdin, stdout, Write};
 use num::Integer;
+use ramp::Int;
 
-fn powmod(mut base: u128, mut exp: u128, modulus: u128) -> u128 {
-	let mut res = 1;
-	while exp > 0 {
-		if exp % 2 == 1 {
-			res = res * base % modulus;
+fn powmod(mut base: Int, exp: &mut Int, modulus: Int) -> Int {
+	let mut res = Int::from(1);
+	while exp > &mut 0 {
+		if &*exp % 2 == 1 {
+			res = res * &base % &modulus;
 		}
 		
-		base = base * base % modulus;
-		exp /= 2;
+		base = &base * &base % &modulus;
+		*exp /= 2;
 	}
 	
 	res
@@ -62,11 +63,11 @@ fn gen(p: u128, q: u128) -> (u128, u128, u128) { // pq-formeln
 	(n, e, d) // Ned
 }
 
-fn encrypt(m: u128, n: u128, e: u128) -> u128 {
+fn encrypt(m: Int, n: Int, e: &mut Int) -> Int {
 	powmod(m, e, n) // jo, men ...
 }
 
-fn decrypt(c: u128, n: u128, d: u128) -> u128 {
+fn decrypt(c: Int, n: Int, d: &mut Int) -> Int {
 	powmod(c, d, n) // Content Delivery Network
 }
 
@@ -85,11 +86,11 @@ fn main() -> Result<(), std::io::Error> {
 			},
 			
 			"ENCRYPT" => {
-				println!("ENCRYPTED MSG: {}\n", encrypt(get("m")?.parse().unwrap(), get("n")?.parse().unwrap(), get("e")?.parse().unwrap()));
+				println!("ENCRYPTED MSG: {}\n", encrypt(get("m")?.parse().unwrap(), get("n")?.parse().unwrap(), &mut get("e")?.parse().unwrap()));
 			},
 			
 			"DECRYPT" => {
-				println!("DECRYPTED MSG: {}\n", decrypt(get("c")?.parse().unwrap(), get("n")?.parse().unwrap(), get("d")?.parse().unwrap()));
+				println!("DECRYPTED MSG: {}\n", decrypt(get("c")?.parse().unwrap(), get("n")?.parse().unwrap(), &mut get("d")?.parse().unwrap()));
 			},
 			
 			"QUIT" => break,
